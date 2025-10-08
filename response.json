@@ -1,5 +1,0 @@
-{
-    "query": "1. query: hey\n2. intent: Greeting",
-    "response": "Hello! How can I help you with the document today?",
-    "documents": {}
-}
