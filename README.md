@@ -1,12 +1,13 @@
-1. git clone -b aoai-pldt https://github.com/robrita/demo aoai-pldt
+1. create .env file and copy the credentials
 
-2. create .env and copy .env.sample
+## execute the following in the terminal:
 
-3. python -m venv venv
+2. python -m venv venv
 
-4. .\venv\Scripts\activate (windows)
-or source venv/bin/activate
+3. source venv/bin/activate
 
-5. pip install -r requirements.txt
+4. pip install -r requirements.txt
 
-6. chainlit run app.py
+5. chainlit run app_basic.py
+
+6. chainlit run app_foundry.py
