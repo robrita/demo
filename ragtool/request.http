@@ -1,0 +1,20 @@
+### Setting up environment variables
+# switch to the dev environment:
+# The {{endpoint}} variable won't resolve unless you select the environment.
+# Press Ctrl+Shift+P → Rest Client: Switch Environment → select dev.
+
+### Send POST request to RAG Tool Logic App
+POST {{endpoint}}
+Content-Type: application/json
+
+{
+  "query": "What is Microsoft AI Landscape?"
+}
+
+### Send POST request to RAG Tool Logic App
+POST {{endpoint}}
+Content-Type: application/json
+
+{
+  "query": "Tell me about memo-016-2024"
+}

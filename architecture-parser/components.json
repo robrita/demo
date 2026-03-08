@@ -1,0 +1,114 @@
+{
+    "overview": "TechPulse is a full-stack web application built with FastAPI (backend) and React SPA (frontend), deployed as a containerized service on Azure Container Apps in the East US 2 region. It leverages Azure AI Foundry with GPT-5.2 and GPT-Image-1.5 models via the Responses API, backed by Cosmos DB for data persistence, a Vector Store for embeddings, and AI Search (Foundry IQ) for intelligent retrieval. Observability is provided through Application Insights using OpenTelemetry. CI/CD is handled by GitHub Actions, which builds container images in Azure Container Registry and deploys updates to the Container App.",
+    "region": "Azure – East US 2",
+    "component_groups": [
+        {
+            "name": "CI/CD",
+            "components": [
+                {
+                    "name": "GitHub Repository",
+                    "resource_name": "—",
+                    "description": "Source code repository; triggers CI/CD pipelines on push"
+                },
+                {
+                    "name": "GitHub Actions",
+                    "resource_name": "—",
+                    "description": "CI / Deploy / Security pipelines; runs `az acr build` and `az containerapp update`"
+                }
+            ]
+        },
+        {
+            "name": "Compute",
+            "components": [
+                {
+                    "name": "Azure Container Registry",
+                    "resource_name": "crtechpulseprod",
+                    "description": "Stores container images built by GitHub Actions via `az acr build`"
+                },
+                {
+                    "name": "Azure Container Apps",
+                    "resource_name": "ca-techpulse-prod",
+                    "description": "Runs the main application (FastAPI + React SPA); pulls images from ACR"
+                }
+            ]
+        },
+        {
+            "name": "Data & Observability",
+            "components": [
+                {
+                    "name": "Azure Cosmos DB",
+                    "resource_name": "—",
+                    "description": "Primary data store for application data"
+                },
+                {
+                    "name": "Vector Store",
+                    "resource_name": "—",
+                    "description": "Stores vector embeddings for semantic search and retrieval"
+                },
+                {
+                    "name": "AI Search (Foundry IQ)",
+                    "resource_name": "—",
+                    "description": "Provides intelligent search and retrieval capabilities"
+                },
+                {
+                    "name": "Application Insights",
+                    "resource_name": "—",
+                    "description": "Collects telemetry from the Container App via OpenTelemetry (OTel)"
+                }
+            ]
+        },
+        {
+            "name": "AI Services",
+            "components": [
+                {
+                    "name": "AI Foundry + Project",
+                    "resource_name": "—",
+                    "description": "Central AI orchestration platform; accessed via the Responses API from the Container App"
+                },
+                {
+                    "name": "Bing Grounding",
+                    "resource_name": "—",
+                    "description": "Provides web grounding capabilities for AI responses"
+                },
+                {
+                    "name": "Content Safety",
+                    "resource_name": "—",
+                    "description": "Filters and moderates AI-generated content for safety"
+                },
+                {
+                    "name": "GPT-5.2",
+                    "resource_name": "gpt-5.2",
+                    "description": "Large language model deployment for text generation"
+                },
+                {
+                    "name": "GPT-Image-1.5",
+                    "resource_name": "gpt-image-1.5",
+                    "description": "Image generation model deployment"
+                }
+            ]
+        },
+        {
+            "name": "External",
+            "components": [
+                {
+                    "name": "MCP Server",
+                    "resource_name": "learn.microsoft.com",
+                    "description": "External MCP server providing access to Microsoft Learn documentation"
+                }
+            ]
+        }
+    ],
+    "data_flow": "Developer --push--> GitHub Repository --trigger--> GitHub Actions\n                                                          |\n                                         az acr build --> ACR (crtechpulseprod)\n                                         az containerapp update -->\n                                                          |\n                                              Container App (ca-techpulse-prod)\n                                              FastAPI + React SPA\n                                                    |         |\n                                              pull from ACR   |\n                                                              |\n                               +------------------------------+-------------------------------+\n                               |                |              |              |                |\n                          Cosmos DB      Vector Store    AI Search      App Insights     Responses API\n                                                        (Foundry IQ)     (OTel)              |\n                                                                                     AI Foundry + Project\n                                                                                        |        |\n                                                                                  Bing Grounding  Content Safety\n                                                                                        |\n                                                                                 gpt-5.2  gpt-image-1.5\n                                                                                        |\n                                                                                   MCP Server\n                                                                              (learn.microsoft.com)",
+    "decisions": [
+        "Containerized deployment using Azure Container Apps for serverless scaling with FastAPI + React SPA bundled in a single container",
+        "Azure Container Registry (ACR) for private container image storage with `az acr build` for cloud-native builds",
+        "GitHub Actions for CI/CD with integrated security scanning, direct ACR build, and Container App deployment via `az containerapp update`",
+        "OpenTelemetry (OTel) for distributed tracing and observability, forwarded to Application Insights",
+        "Azure AI Foundry as the central AI orchestration layer, accessed via the Responses API",
+        "Multi-model strategy with GPT-5.2 for text generation and GPT-Image-1.5 for image generation",
+        "Bing Grounding for web-augmented AI responses and Content Safety for moderation",
+        "Cosmos DB for scalable NoSQL data persistence alongside a dedicated Vector Store for embedding-based retrieval",
+        "AI Search (Foundry IQ) for intelligent search and retrieval-augmented generation (RAG)",
+        "MCP Server integration with learn.microsoft.com for external documentation access"
+    ]
+}
