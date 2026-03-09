@@ -4,7 +4,7 @@
 # Press Ctrl+Shift+P → Rest Client: Switch Environment → select dev.
 
 ### Send POST request to RAG Tool Logic App
-POST {{endpoint}}
+POST {{$dotenv endpoint}}
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ### Send POST request to RAG Tool Logic App
-POST {{endpoint}}
+POST {{$dotenv endpoint}}
 Content-Type: application/json
 
 {
