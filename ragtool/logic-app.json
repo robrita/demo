@@ -1,0 +1,125 @@
+{
+    "definition": {
+        "metadata": {
+            "agentType": "autonomous"
+        },
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "triggers": {
+            "HTTP_Trigger": {
+                "type": "Request",
+                "description": "",
+                "kind": "Http",
+                "inputs": {
+                    "method": "POST",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "User input query"
+                            }
+                        },
+                        "required": [
+                            "query"
+                        ]
+                    }
+                }
+            }
+        },
+        "actions": {
+            "HTTP_Response": {
+                "type": "Response",
+                "kind": "Http",
+                "inputs": {
+                    "statusCode": 200,
+                    "body": "@outputs('Agent_c88f')?['lastAssistantMessage']"
+                },
+                "runAfter": {
+                    "Agent_c88f": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Agent_c88f": {
+                "type": "Agent",
+                "inputs": {
+                    "parameters": {
+                        "messages": [
+                            {
+                                "role": "system",
+                                "content": "You are a knowledge assistant that answers questions using ONLY the provided context or tool.\n\nRules:\n- Answer strictly from the retrieved context. Do not use prior knowledge.\n- If the context or tool does not contain enough information to answer, say: \"not found.\"\n- Never fabricate facts, URLs, citations, or data not present in the context.\n- Quote or closely paraphrase the source material. Cite the source document when possible.\n- If the context partially answers the question, provide what you can and explicitly state what is missing.\n"
+                            },
+                            {
+                                "role": "user",
+                                "content": "@{triggerBody()?['query']}"
+                            }
+                        ],
+                        "agentModelType": "AzureOpenAI",
+                        "agentModelSettings": {
+                            "agentHistoryReductionSettings": {
+                                "agentHistoryReductionType": "messageCountReduction"
+                            },
+                            "agentChatCompletionSettings": {
+                                "temperature": 0,
+                                "responseFormat": {
+                                    "type": "text"
+                                }
+                            }
+                        },
+                        "modelId": "gpt-4o-mini"
+                    }
+                },
+                "tools": {
+                    "Tool": {
+                        "actions": {
+                            "Search_vectors_with_natural_language": {
+                                "type": "ApiConnection",
+                                "inputs": {
+                                    "host": {
+                                        "connection": {
+                                            "name": "@parameters('$connections')['azureaisearch']['connectionId']"
+                                        }
+                                    },
+                                    "method": "post",
+                                    "body": {
+                                        "searchText": "@triggerBody()?['query']",
+                                        "vectorizedSearchFields": [
+                                            "vector"
+                                        ]
+                                    },
+                                    "path": "/integratedVectorSearch/@{encodeURIComponent('sharepoint-search')}"
+                                }
+                            }
+                        },
+                        "description": "Search the knowledge base for information relevant to the user's query. Returns ranked document chunks with source metadata. Use this tool for EVERY user question before answering."
+                    }
+                },
+                "runAfter": {},
+                "limit": {
+                    "count": 100
+                }
+            }
+        },
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "type": "Object",
+                "defaultValue": {}
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "type": "Object",
+            "value": {
+                "azureaisearch": {
+                    "id": "/subscriptions/860b4774-54d0-4b72-a79f-ce6e6c1011dc/providers/Microsoft.Web/locations/eastus/managedApis/azureaisearch",
+                    "connectionId": "/subscriptions/860b4774-54d0-4b72-a79f-ce6e6c1011dc/resourceGroups/demo2/providers/Microsoft.Web/connections/aisearchbyapikey-aiengr-forwizard",
+                    "connectionName": "aisearchbyapikey-aiengr-forwizard",
+                    "connectionProperties": {}
+                }
+            }
+        }
+    }
+}
