@@ -2,11 +2,15 @@
 name = "test-case-generator"
 version = "0.1.0"
 description = "Sample Python test generator using GitHub Copilot or Microsoft Foundry models."
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
     "github-copilot-sdk",
     "pytest",
     "python-dotenv",
+    "azure-ai-projects>=2.0.0b1",
+    "azure-identity",
+    "langgraph",
+    "langchain-openai",
 ]
 
 [tool.uv]
