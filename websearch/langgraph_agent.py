@@ -1,31 +1,40 @@
 """LangGraph agent that answers questions using web search via Bing grounding."""
 
+import asyncio
 import os
 
-from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+from azure.identity import AzureCliCredential, ChainedTokenCredential, ManagedIdentityCredential, get_bearer_token_provider
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_core.tools import tool
+from langchain_core.tools import StructuredTool
 from langchain_openai import AzureChatOpenAI
 from langgraph.graph import START, StateGraph, MessagesState
 from langgraph.prebuilt import ToolNode, tools_condition
 
-from web_search_tool import web_search
+from web_search_tool import web_search, async_web_search
 
 load_dotenv()
 
 
-@tool
-def search_web(query: str) -> str:
-    """Search the web for real-time information. Use this tool when you need
-    up-to-date facts, news, weather, or any information that may not be in
-    your training data."""
-    return web_search(query)
+search_web = StructuredTool.from_function(
+    func=web_search,
+    coroutine=async_web_search,
+    name="search_web",
+    description=(
+        "Search the web for real-time information. Use this tool when you need "
+        "up-to-date facts, news, weather, or any information that may not be in "
+        "your training data."
+    ),
+)
 
 
 # --- LLM setup -----------------------------------------------------------
+_credential = ChainedTokenCredential(
+    AzureCliCredential(),
+    ManagedIdentityCredential(),
+)
 token_provider = get_bearer_token_provider(
-    DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default"
+    _credential, "https://cognitiveservices.azure.com/.default"
 )
 llm = AzureChatOpenAI(
     azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
@@ -45,10 +54,10 @@ SYSTEM_PROMPT = (
 )
 
 
-def assistant(state: MessagesState):
+async def assistant(state: MessagesState):
     """Call the LLM, optionally invoking tools."""
     messages = [SystemMessage(content=SYSTEM_PROMPT)] + state["messages"]
-    return {"messages": [llm_with_tools.invoke(messages)]}
+    return {"messages": [await llm_with_tools.ainvoke(messages)]}
 
 
 # --- Build the graph ------------------------------------------------------
@@ -65,17 +74,17 @@ graph = graph_builder.compile()
 
 
 # --- CLI entry point ------------------------------------------------------
-def main():
+async def main():
     print("LangGraph Web Search Agent (type 'quit' to exit)\n")
     while True:
         user_input = input("You: ").strip()
         if not user_input or user_input.lower() in ("quit", "exit", "q"):
             break
 
-        result = graph.invoke({"messages": [HumanMessage(content=user_input)]})
+        result = await graph.ainvoke({"messages": [HumanMessage(content=user_input)]})
         ai_message = result["messages"][-1]
         print(f"\nAssistant: {ai_message.content}\n")
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
