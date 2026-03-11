@@ -2,6 +2,7 @@
 
 import asyncio
 import os
+import time
 
 from azure.identity import AzureCliCredential, ChainedTokenCredential, ManagedIdentityCredential, get_bearer_token_provider
 from dotenv import load_dotenv
@@ -81,9 +82,12 @@ async def main():
         if not user_input or user_input.lower() in ("quit", "exit", "q"):
             break
 
+        start = time.perf_counter()
         result = await graph.ainvoke({"messages": [HumanMessage(content=user_input)]})
+        elapsed = time.perf_counter() - start
         ai_message = result["messages"][-1]
-        print(f"\nAssistant: {ai_message.content}\n")
+        print(f"\nAssistant: {ai_message.content}")
+        print(f"(Response time: {elapsed:.2f}s)\n")
 
 
 if __name__ == "__main__":
