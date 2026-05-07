@@ -1,0 +1,65 @@
+{
+  "escalationTaxonomy": {
+    "version": "1.0",
+    "categories": [
+      {
+        "category": "compliance",
+        "triggers": [
+          "Regulatory interpretation required",
+          "BSP circular applicability question",
+          "Anti-money laundering concern",
+          "Suspicious transaction inquiry",
+          "Potential regulatory breach"
+        ],
+        "escalateTo": "Chief Compliance Officer or Compliance Division",
+        "action": "Route to Compliance Review Agent; do not provide regulatory interpretation"
+      },
+      {
+        "category": "legal",
+        "triggers": [
+          "Customer threatens legal action",
+          "Court order or subpoena mentioned",
+          "Contract interpretation needed",
+          "Liability or indemnity question"
+        ],
+        "escalateTo": "Legal Department",
+        "action": "Route to Compliance Review Agent; do not provide legal advice"
+      },
+      {
+        "category": "privacy",
+        "triggers": [
+          "Data breach suspected",
+          "Customer requests data deletion",
+          "Data sharing with third party questioned",
+          "Cross-border data transfer",
+          "NPC complaint"
+        ],
+        "escalateTo": "Data Protection Office",
+        "action": "Route to Compliance Review Agent; flag as privacy-sensitive"
+      },
+      {
+        "category": "customer_impact",
+        "triggers": [
+          "Customer compensation request > PHP 50,000",
+          "Vulnerable customer involved",
+          "Media exposure risk",
+          "Public figure or government official",
+          "Repetitive complaint (3+ in 30 days)"
+        ],
+        "escalateTo": "Customer Experience Head or Division Head",
+        "action": "Route to Compliance Review Agent; recommend human review"
+      },
+      {
+        "category": "fraud",
+        "triggers": [
+          "Unauthorized transaction reported",
+          "Account takeover suspected",
+          "Phishing or social engineering reported",
+          "Internal fraud suspected"
+        ],
+        "escalateTo": "Fraud Operations",
+        "action": "Route to Compliance Review Agent; do not advise account blocking without human approval"
+      }
+    ]
+  }
+}

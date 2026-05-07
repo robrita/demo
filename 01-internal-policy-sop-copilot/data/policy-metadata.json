@@ -1,0 +1,68 @@
+[
+  {
+    "policyId": "POL-2024-001",
+    "title": "Fee Waiver and Reversal Policy",
+    "owner": "Retail Banking Operations – Head of Service Quality",
+    "version": "3.2",
+    "effectiveDate": "2024-01-15",
+    "reviewDate": "2025-01-15",
+    "domain": "Branch Operations / Service Quality",
+    "confidentiality": "Internal Use Only",
+    "sourceUrl": "sharepoint://policies/retail-ops/POL-2024-001-fee-waiver-policy.pdf"
+  },
+  {
+    "policyId": "POL-2024-002",
+    "title": "Account Opening Standard Operating Procedure",
+    "owner": "Retail Banking – Head of Deposits",
+    "version": "4.1",
+    "effectiveDate": "2024-03-01",
+    "reviewDate": "2025-03-01",
+    "domain": "Branch Operations / Account Services",
+    "confidentiality": "Internal Use Only",
+    "sourceUrl": "sharepoint://policies/retail-ops/POL-2024-002-account-opening-sop.pdf"
+  },
+  {
+    "policyId": "POL-2024-003",
+    "title": "Customer Complaint Handling Policy",
+    "owner": "Customer Experience Division – Head of Quality Assurance",
+    "version": "2.5",
+    "effectiveDate": "2024-02-01",
+    "reviewDate": "2025-02-01",
+    "domain": "Customer Service / Compliance",
+    "confidentiality": "Internal Use Only",
+    "sourceUrl": "sharepoint://policies/cx-division/POL-2024-003-complaint-handling.pdf"
+  },
+  {
+    "policyId": "POL-2024-004",
+    "title": "Data Privacy and Information Security Policy",
+    "owner": "Data Protection Office – Chief Privacy Officer",
+    "version": "2.0",
+    "effectiveDate": "2024-01-01",
+    "reviewDate": "2025-01-01",
+    "domain": "Compliance / Information Security",
+    "confidentiality": "Internal – Restricted",
+    "sourceUrl": "sharepoint://policies/compliance/POL-2024-004-data-privacy.pdf"
+  },
+  {
+    "policyId": "POL-2024-005",
+    "title": "Escalation Matrix and Procedures",
+    "owner": "Operations Division – Chief Operating Officer",
+    "version": "1.8",
+    "effectiveDate": "2024-01-01",
+    "reviewDate": "2025-01-01",
+    "domain": "Operations / Risk / Compliance",
+    "confidentiality": "Internal Use Only",
+    "sourceUrl": "sharepoint://policies/operations/POL-2024-005-escalation-matrix.pdf"
+  },
+  {
+    "policyId": "BOM-2024-001",
+    "title": "Branch Operations Manual",
+    "owner": "Retail Banking Operations – Head of Branch Operations",
+    "version": "6.0",
+    "effectiveDate": "2024-01-01",
+    "reviewDate": "2025-01-01",
+    "domain": "Branch Operations",
+    "confidentiality": "Internal Use Only",
+    "sourceUrl": "sharepoint://policies/retail-ops/BOM-2024-001-branch-operations-manual.pdf"
+  }
+]

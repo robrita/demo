@@ -1,0 +1,138 @@
+{
+  "name": "policy-search-index",
+  "fields": [
+    {
+      "name": "id",
+      "type": "Edm.String",
+      "key": true,
+      "searchable": false,
+      "filterable": true
+    },
+    {
+      "name": "title",
+      "type": "Edm.String",
+      "searchable": true,
+      "filterable": true,
+      "sortable": true,
+      "analyzerName": "en.microsoft"
+    },
+    {
+      "name": "domain",
+      "type": "Edm.String",
+      "searchable": true,
+      "filterable": true,
+      "facetable": true,
+      "analyzerName": "en.microsoft"
+    },
+    {
+      "name": "section",
+      "type": "Edm.String",
+      "searchable": true,
+      "filterable": true,
+      "sortable": true
+    },
+    {
+      "name": "content",
+      "type": "Edm.String",
+      "searchable": true,
+      "filterable": false,
+      "analyzerName": "en.microsoft"
+    },
+    {
+      "name": "owner",
+      "type": "Edm.String",
+      "searchable": true,
+      "filterable": true,
+      "facetable": true
+    },
+    {
+      "name": "effective_date",
+      "type": "Edm.DateTimeOffset",
+      "searchable": false,
+      "filterable": true,
+      "sortable": true
+    },
+    {
+      "name": "review_date",
+      "type": "Edm.DateTimeOffset",
+      "searchable": false,
+      "filterable": true,
+      "sortable": true
+    },
+    {
+      "name": "source_url",
+      "type": "Edm.String",
+      "searchable": false,
+      "filterable": false
+    },
+    {
+      "name": "confidentiality",
+      "type": "Edm.String",
+      "searchable": false,
+      "filterable": true,
+      "facetable": true
+    },
+    {
+      "name": "policy_id",
+      "type": "Edm.String",
+      "searchable": true,
+      "filterable": true
+    },
+    {
+      "name": "version",
+      "type": "Edm.String",
+      "searchable": false,
+      "filterable": true
+    },
+    {
+      "name": "content_vector",
+      "type": "Collection(Edm.Single)",
+      "searchable": true,
+      "dimensions": 1536,
+      "vectorSearchProfile": "policy-vector-profile"
+    }
+  ],
+  "vectorSearch": {
+    "algorithms": [
+      {
+        "name": "policy-hnsw",
+        "kind": "hnsw",
+        "hnswParameters": {
+          "m": 4,
+          "efConstruction": 400,
+          "efSearch": 500,
+          "metric": "cosine"
+        }
+      }
+    ],
+    "profiles": [
+      {
+        "name": "policy-vector-profile",
+        "algorithmConfigurationName": "policy-hnsw"
+      }
+    ]
+  },
+  "semantic": {
+    "configurations": [
+      {
+        "name": "policy-semantic-config",
+        "prioritizedFields": {
+          "titleField": {"fieldName": "title"},
+          "contentFields": [{"fieldName": "content"}],
+          "keywordsFields": [
+            {"fieldName": "domain"},
+            {"fieldName": "section"},
+            {"fieldName": "policy_id"}
+          ]
+        }
+      }
+    ]
+  },
+  "suggesters": [
+    {
+      "name": "policy-suggester",
+      "searchMode": "analyzingInfixMatching",
+      "sourceFields": ["title", "domain", "policy_id"]
+    }
+  ]
+}
